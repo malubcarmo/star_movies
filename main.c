@@ -1,35 +1,31 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX 15   // Quantidade máxima de filmes que podem ser cadastrados
+#define MAX 15
 
-// -------------------------------
-// Definição da Estrutura Filme
-// -------------------------------
+// Estrutura de dados para armazenar informações do filme
 typedef struct {
-    char nome[50];
+    char nome[50];      
     int ano;
     float notaMedia;
     int qtdAvaliacoes;
 } Filme;
 
-// Array estático de filmes
+// Variável global acessada por várias funções
 Filme lista[MAX];
-int total = 0; // Quantidade de filmes cadastrados
+int total = 0;      
 
-// -------------------------------
-// Protótipos das Funções
-// -------------------------------
+// Protótipos
 int cadastrarFilme();
 int adicionarAvaliacao();
 void exibirFilmes();
 
-// -------------------------------
-// Função Principal (Menu)
-// -------------------------------
+// Função principal com repetição e controle
 int main() {
+
     int opcao;
 
+    // Estrutura de repetição
     do {
         printf("\n===============================\n");
         printf("  SISTEMA DE AVALIACAO DE FILMES\n");
@@ -40,21 +36,22 @@ int main() {
         printf("0 - Sair\n");
         printf("Escolha: ");
         scanf("%d", &opcao);
-        getchar();  // Limpa o buffer do teclado
+        getchar();
 
+        // Controle de fluxo com switch e if
         switch (opcao) {
             case 1:
                 if (cadastrarFilme())
                     printf("\nFilme cadastrado com sucesso!\n");
                 else
-                    printf("\nErro ao cadastrar filme (limite atingido).\n");
+                    printf("\nErro ao cadastrar filme.\n");
                 break;
 
             case 2:
                 if (adicionarAvaliacao())
                     printf("\nAvaliacao registrada com sucesso!\n");
                 else
-                    printf("\nFilme nao encontrado.\n");
+                    printf("\nErro! Filme nao encontrado.\n");
                 break;
 
             case 3:
@@ -68,20 +65,21 @@ int main() {
             default:
                 printf("\nOpcao invalida.\n");
         }
+
     } while (opcao != 0);
 
     return 0;
 }
 
-// ----------------------------------------
-// Função 1: Cadastrar um novo filme
-// ----------------------------------------
+// Função 1 — Cadastrar Filme
 int cadastrarFilme() {
+
     if (total >= MAX) {
-        printf("\nLimite máximo de %d filmes atingido. Não é possível cadastrar mais.\n", MAX);
+        printf("\nLimite maximo de filmes atingido.\n");
         return 0;
     }
 
+    // Variáveis locais
     printf("\nDigite o nome do filme: ");
     fgets(lista[total].nome, 50, stdin);
     lista[total].nome[strcspn(lista[total].nome, "\n")] = '\0';
@@ -90,28 +88,29 @@ int cadastrarFilme() {
     scanf("%d", &lista[total].ano);
     getchar();
 
+    // Atribuições
     lista[total].notaMedia = 0;
     lista[total].qtdAvaliacoes = 0;
 
+    // Operação aritmética
     total++;
 
-    //Aviso de limite atingido
+    // Escopo de bloco 
     if (total == MAX) {
-        printf("\nATENÇÃO: Você cadastrou o filme número %d.\n", MAX);
-        printf("O limite máximo foi atingido. Não será possível cadastrar novos filmes.\n");
+        int i = total;
+        printf("\nAviso: atingiu o limite de %d filmes (variavel i=%d)\n", MAX, i);
     }
 
     return 1;
 }
 
-// ----------------------------------------
-// Função 2: Adicionar avaliação a um filme
-// ----------------------------------------
+// Função 2 — Adicionar Avaliação
 int adicionarAvaliacao() {
-    char nomeBusca[50];
-    float nota;
 
-    printf("\nDigite o nome do filme que deseja avaliar: ");
+    char nomeBusca[50];  
+    float nota;          
+
+    printf("\nDigite o nome do filme: ");
     fgets(nomeBusca, 50, stdin);
     nomeBusca[strcspn(nomeBusca, "\n")] = '\0';
 
@@ -124,10 +123,13 @@ int adicionarAvaliacao() {
         return 0;
     }
 
+    // Estrutura de repetição
     for (int i = 0; i < total; i++) {
+
+        // Comparação de strings
         if (strcmp(lista[i].nome, nomeBusca) == 0) {
 
-            // Atualiza média
+            // Cálculo da nova média (aritmética)
             lista[i].notaMedia =
                 ((lista[i].notaMedia * lista[i].qtdAvaliacoes) + nota) /
                 (lista[i].qtdAvaliacoes + 1);
@@ -138,13 +140,12 @@ int adicionarAvaliacao() {
         }
     }
 
-    return 0; // Filme não encontrado
+    return 0;
 }
 
-// ----------------------------------------
-// Função 3: Exibir todos os filmes
-// ----------------------------------------
+// Procedimento (void) — sem retorno
 void exibirFilmes() {
+
     printf("\n====== LISTA DE FILMES ======\n");
 
     if (total == 0) {

@@ -1,3 +1,6 @@
+//Maria Luiza Bispo do Carmo
+//Guilherme Cardoso Ferreira
+
 #include <stdio.h>
 #include <string.h>
 
